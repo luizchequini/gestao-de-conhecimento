@@ -14,5 +14,6 @@ public interface IServicoDeDominioCategoria
     Task<List<Categoria>> FindList(Categoria categoria);
     Task<Categoria> FindById(Categoria categoria);
     Task<Categoria> FindById(int id);
+    Task<List<Categoria>> FindAll();
     Task<Categoria> Delete(int id);
 }

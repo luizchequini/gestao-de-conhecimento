@@ -30,6 +30,11 @@ namespace BaseDeConhecimento.Infraestrutura.Respositorios
             return obj;
         }
 
+        public async Task<List<T>> FindAll(Expression<Func<T, bool>> predicate)
+        {
+            return await _contexto.Set<T>().Where(predicate).ToListAsync();
+        }
+
         public async Task<T> FindById(int Id)
         {
             return await _contexto.Set<T>().FindAsync(Id);
@@ -47,5 +52,6 @@ namespace BaseDeConhecimento.Infraestrutura.Respositorios
             await _contexto.SaveChangesAsync();
             return obj;
         }
+
     }
 }
