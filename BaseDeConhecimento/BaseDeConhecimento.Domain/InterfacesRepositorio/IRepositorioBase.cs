@@ -13,6 +13,6 @@ namespace BaseDeConhecimento.Domain.InterfacesRepositorio
         Task<T> Update(T obj);
         Task<T> Delete(int Id);
         Task<T> FindById(int Id);
-        Task<List<T>> FindList(Expression expression);
+        Task<List<T>> FindAll(Expression<Func<T, bool>> predicate);
     }
 }

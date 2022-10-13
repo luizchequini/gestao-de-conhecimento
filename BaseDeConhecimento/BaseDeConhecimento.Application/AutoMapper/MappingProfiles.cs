@@ -12,7 +12,6 @@ namespace BaseDeConhecimento.Application.AutoMapper
         {
 
             CreateMap<Conhecimento, ConhecimentoDTO>().ReverseMap();
-            CreateMap<ConhecimentoDTO, Conhecimento>().ReverseMap();
             CreateMap<Conhecimento, CreateConhecimentoRequestDTO>().ReverseMap();
             
             CreateMap<Categoria, CategoriaDTO>().ReverseMap();

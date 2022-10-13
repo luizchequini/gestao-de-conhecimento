@@ -43,10 +43,6 @@ public class CategoriaService : ICategoriaService
         }
     }
 
-    public Task<ApiResult<CategoriaDTO>> Delete(CategoriaDTO conhecimentoDTO)
-    {
-        throw new NotImplementedException();
-    }
     public async Task<ApiResult<CategoriaDTO>> Delete(int id)
     {
         var apiResult = new ApiResult<CategoriaDTO>();
@@ -67,9 +63,27 @@ public class CategoriaService : ICategoriaService
         }
     }
 
-    public Task<ApiResult<CategoriaDTO>> FindById(CategoriaDTO conhecimentoDTO)
+    public async Task<ApiResult<List<CategoriaDTO>>> FindAll()
     {
-        throw new NotImplementedException();
+        var apiResult = new ApiResult<List<CategoriaDTO>>();
+
+        try
+        {
+            var resultado = await _servicoDeDominioCategoria.FindAll();
+            var categoriaDTO = new List<CategoriaDTO>();
+            apiResult.Data = _mapper.Map(resultado, categoriaDTO);
+            apiResult.Success = true;
+
+            apiResult.Notification = new List<string> { "Retornado com sucesso" };
+            return apiResult;
+        }
+        catch (Exception ex)
+        {
+
+            apiResult.Success = false;
+            apiResult.Notification = new List<string> { "falhou" + ex.Message };
+            return apiResult;
+        }
     }
 
     public async Task<ApiResult<CategoriaDTO>> FindById(int id)
@@ -82,36 +96,6 @@ public class CategoriaService : ICategoriaService
             apiResult.Success = true;
 
             apiResult.Notification = new List<string> { "Retornado com sucesso" };
-            return apiResult;
-        }
-        catch (Exception)
-        {
-            apiResult.Success = false;
-            apiResult.Notification = new List<string> { "falhou" };
-            return apiResult;
-        }
-    }
-
-    public Task<ApiResult<List<CategoriaDTO>>> FindList(CategoriaDTO conhecimentoDTO)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<ApiResult<CategoriaDTO>> Update(int id)
-    {
-        var apiResult = new ApiResult<CategoriaDTO>();
-        try
-        {
-            var categoria = await _servicoDeDominioCategoria.FindById(id);
-
-            if (categoria is not null)
-            {
-                var resultado = await _servicoDeDominioCategoria.Update(categoria);
-                apiResult.Data = _mapper.Map<CategoriaDTO>(resultado);
-                apiResult.Success = true;
-
-                apiResult.Notification = new List<string> { "Retornado com sucesso" };
-            }
             return apiResult;
         }
         catch (Exception)

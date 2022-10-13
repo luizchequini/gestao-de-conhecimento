@@ -1,6 +1,7 @@
 ﻿using BaseDeConhecimento.Domain.Entidades;
 using BaseDeConhecimento.Domain.InterfacesDominio;
 using BaseDeConhecimento.Domain.InterfacesRepositorio;
+using System.Linq.Expressions;
 
 namespace BaseDeConhecimento.Domain.Servicos;
 
@@ -34,6 +35,11 @@ public class ServicoDeDominioCategoria : IServicoDeDominioCategoria
     public async Task<Categoria> FindById(int id)
     {
         return await _repositorioCategoria.FindById(id);
+    }
+
+    public async Task<List<Categoria>> FindAll()
+    {
+        return await _repositorioCategoria.FindAll(x =>x.Id > 0);
     }
 
     public Task<List<Categoria>> FindList(Categoria categoria)

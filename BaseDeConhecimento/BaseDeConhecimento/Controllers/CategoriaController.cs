@@ -38,6 +38,12 @@ public class CategoriaController : ControllerBase
 
     }
 
+    [HttpGet("findall")]
+    public async Task<object> FindAll()
+    {
+        return await _CategoriaService.FindAll();
+    }
+
     [HttpPut("update")]
     public async Task<object> Update(CreateCategoriaRequestDTO request)
     {
