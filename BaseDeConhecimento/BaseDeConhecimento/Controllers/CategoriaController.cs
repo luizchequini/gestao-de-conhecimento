@@ -22,7 +22,7 @@ public class CategoriaController : ControllerBase
 
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<object> Delete(int id)
     {
 
@@ -30,7 +30,7 @@ public class CategoriaController : ControllerBase
 
     }
 
-    [HttpPost("{id}")]
+    [HttpGet("findbyid/{id}")]
     public async Task<object> FindById(int id)
     {
 
@@ -38,7 +38,7 @@ public class CategoriaController : ControllerBase
 
     }
 
-    [HttpPost("update")]
+    [HttpPut("update")]
     public async Task<object> Update(CreateCategoriaRequestDTO request)
     {
         return await _CategoriaService.Update(request);
