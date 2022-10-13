@@ -5,22 +5,25 @@ using BaseDeConhecimento.Application.DTOS.Response;
 using BaseDeConhecimento.Application.Interfaces;
 using BaseDeConhecimento.Domain.Entidades;
 using BaseDeConhecimento.Domain.InterfacesDominio;
+using BaseDeConhecimento.Domain.Validation;
 
 namespace BaseDeConhecimento.Application.Servicos;
 
 public class ConhecimentoServico : IConhecimentoService
 {
     private readonly IServicoDeDominioConhecimento _servicoDeDominioConhecimento;
+    private readonly IServicoDeDominioCategoria _servicoDeDominioCategoria;
     private readonly IMapper _mapper;
 
-    public ConhecimentoServico(IMapper mapper, IServicoDeDominioConhecimento servicoDeDominioConhecimento)
+    public ConhecimentoServico(IMapper mapper, IServicoDeDominioConhecimento servicoDeDominioConhecimento, IServicoDeDominioCategoria servicoDeDominioCategoria)
     {
         _servicoDeDominioConhecimento = servicoDeDominioConhecimento;
+        _servicoDeDominioCategoria = servicoDeDominioCategoria;
         _mapper = mapper;
     }
-    
-    
-    
+
+
+
     public async Task<ApiResult<ConhecimentoDTO>> Create(CreateConhecimentoRequestDTO conhecimentoRequest)
     {
         ApiResult<ConhecimentoDTO> apiResult = new ApiResult<ConhecimentoDTO>();
@@ -29,37 +32,52 @@ public class ConhecimentoServico : IConhecimentoService
         {
             var conhecimento = _mapper.Map<Conhecimento>(conhecimentoRequest);
 
-           var entity = await _servicoDeDominioConhecimento.Create(conhecimento);
+            var validationResult = await new ConhecimentoValidator()
+                                                .ValidateAsync(conhecimento);
 
-            var conhecimentoDTO = _mapper.Map<ConhecimentoDTO>(entity);
-            apiResult.Data = conhecimentoDTO;
-            apiResult.Success = true;
-             
-            apiResult.Notification = new List<string> { "cadastrado com sucesso" };
+            if (validationResult.IsValid)
+            {
+
+                var entity = await _servicoDeDominioConhecimento.Create(conhecimento);
+                var conhecimentoDTO = _mapper.Map<ConhecimentoDTO>(entity);
+                apiResult.Data = conhecimentoDTO;
+                apiResult.Success = true;
+                apiResult.Notification = new List<string> { "cadastrado com sucesso" };
+            }
+            else
+            {
+                apiResult.Data = null;
+                apiResult.Success = false;
+
+                var erros = new List<string>();
+                foreach (var item in validationResult.Errors)
+                {
+                    erros.Add($"Erro na propriedade {item.PropertyName} Erro {item.ErrorMessage}");
+                }
+
+                apiResult.Notification = erros;
+            }
+
             return apiResult;
         }
-        catch (Exception)
-        { 
+        catch (Exception ex)
+        {
             apiResult.Success = false;
-            apiResult.Notification = new List<string> { "falhou"};
+            apiResult.Notification = new List<string> { ex.Message };
             return apiResult;
         }
     }
 
-    public async Task<ApiResult<CategoriaDTO>> CreateCategoria(CreateCategoriaRequestDTO categoriarequest)
+    public async Task<ApiResult<ConhecimentoDTO>> Delete(int id)
     {
-        var apiResult = new ApiResult<CategoriaDTO>();
+        var apiResult = new ApiResult<ConhecimentoDTO>();
         try
-        { 
-
-         var entity = _mapper.Map<Categoria>(categoriarequest);
-             
-
-            var resultado = await _servicoDeDominioConhecimento.CreateCategoria(entity);
-            apiResult.Data = _mapper.Map<CategoriaDTO>(resultado); ;
+        {
+            var resultado = await _servicoDeDominioConhecimento.Delete(id);
+            apiResult.Data = _mapper.Map<ConhecimentoDTO>(resultado);
             apiResult.Success = true;
 
-            apiResult.Notification = new List<string> { "cadastrado com sucesso" };
+            apiResult.Notification = new List<string> { "Excluido com sucesso" };
             return apiResult;
         }
         catch (Exception)
@@ -68,12 +86,6 @@ public class ConhecimentoServico : IConhecimentoService
             apiResult.Notification = new List<string> { "falhou" };
             return apiResult;
         }
-    }
-
-  
-    public Task<ApiResult<ConhecimentoDTO>> Delete(ConhecimentoDTO conhecimentoDTO)
-    {
-        throw new NotImplementedException();
     }
 
     public Task<ApiResult<ConhecimentoDTO>> FindById(ConhecimentoDTO conhecimentoDTO)

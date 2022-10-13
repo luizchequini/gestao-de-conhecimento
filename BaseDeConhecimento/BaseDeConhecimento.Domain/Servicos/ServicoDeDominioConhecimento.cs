@@ -1,6 +1,7 @@
 ﻿using BaseDeConhecimento.Domain.Entidades;
 using BaseDeConhecimento.Domain.InterfacesDominio;
 using BaseDeConhecimento.Domain.InterfacesRepositorio;
+using BaseDeConhecimento.Domain.Validation;
 
 namespace BaseDeConhecimento.Domain.Servicos;
 
@@ -8,6 +9,7 @@ public class ServicoDeDominioConhecimento : IServicoDeDominioConhecimento
 {
     private readonly IRepositorioConhecimento _repositorioConhecimento;
     private readonly IRepositorioCategoria _repositorioCategoria;
+
     public ServicoDeDominioConhecimento(IRepositorioConhecimento repositorioConhecimento, IRepositorioCategoria repositorioCategoria)
     {
         _repositorioConhecimento = repositorioConhecimento;
@@ -16,30 +18,15 @@ public class ServicoDeDominioConhecimento : IServicoDeDominioConhecimento
 
     public async Task<Conhecimento> Create(Conhecimento conhecimento)
     {
-
         if (conhecimento.Id > 0)
             return await _repositorioConhecimento.Update(conhecimento);
         else
             return await _repositorioConhecimento.Create(conhecimento);
-
-
-    }
-    public async Task<Categoria> CreateCategoria(Categoria cat)
-    {
-
-        if (cat.Id > 0)
-            return await _repositorioCategoria.Update(cat);
-        else
-            return await _repositorioCategoria.Create(cat);
-
-
     }
 
-
-
-    public Task<Conhecimento> Delete(Conhecimento conhecimento)
+    public Task<Conhecimento> Delete(int id)
     {
-        throw new NotImplementedException();
+        return _repositorioConhecimento.Delete(id);
     }
 
     public Task<Conhecimento> FindById(Conhecimento conhecimento)

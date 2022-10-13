@@ -6,6 +6,7 @@ using BaseDeConhecimento.Domain.InterfacesRepositorio;
 using BaseDeConhecimento.Domain.Servicos;
 using BaseDeConhecimento.Infraestrutura.Contexto;
 using BaseDeConhecimento.Infraestrutura.Respositorios;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,10 +24,13 @@ builder.Services.AddDbContext<BaseDeConhecimentoContext>(options => options.UseL
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped< IRepositorioCategoria , RepositorioCategoria>();
+builder.Services.AddScoped<IServicoDeDominioCategoria, ServicoDeDominioCategoria>();
+
 builder.Services.AddScoped<IConhecimentoService,ConhecimentoServico>();
 builder.Services.AddScoped<IServicoDeDominioConhecimento,ServicoDeDominioConhecimento>();
 builder.Services.AddScoped< IRepositorioConhecimento  , RepositorioConhemento>();
-builder.Services.AddScoped< IRepositorioCategoria , RepositorioCategoria>();
 
 var app = builder.Build();
 

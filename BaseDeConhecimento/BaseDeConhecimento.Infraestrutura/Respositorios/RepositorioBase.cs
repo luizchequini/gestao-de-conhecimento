@@ -15,22 +15,17 @@ namespace BaseDeConhecimento.Infraestrutura.Respositorios
         }
         public async Task<T> Create(T obj)
         {
-            await _contexto.Set<T>().AddAsync(obj); await _contexto.SaveChangesAsync();
-            return obj;
-        }
-
-        public async Task<T> Delete(T obj)
-        {
-            _contexto.Set<T>().Remove(obj);
+            await _contexto.Set<T>().AddAsync(obj);
             await _contexto.SaveChangesAsync();
             return obj;
         }
 
         public async Task<T> Delete(int Id)
         {
-            var obj =await FindById(Id);
+            var obj = await FindById(Id);
             if (obj is not null)
-                await Delete(obj);
+                _contexto.Set<T>().Remove(obj);
+                await _contexto.SaveChangesAsync();
 
             return obj;
         }
@@ -42,13 +37,15 @@ namespace BaseDeConhecimento.Infraestrutura.Respositorios
         }
 
         public async Task<List<T>> FindList(Expression expression)
-        { 
+        {
             return await _contexto.Set<T>().ToListAsync();
         }
 
-        public Task<T> Update(T obj)
+        public async Task<T> Update(T obj)
         {
-            throw new NotImplementedException();
+            _contexto.Set<T>().Update(obj);
+            await _contexto.SaveChangesAsync();
+            return obj;
         }
     }
 }

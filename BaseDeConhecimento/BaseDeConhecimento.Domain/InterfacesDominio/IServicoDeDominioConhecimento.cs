@@ -13,7 +13,5 @@ public interface IServicoDeDominioConhecimento
     Task<Conhecimento> Update(Conhecimento conhecimento);
     Task<List<Conhecimento>> FindList(Conhecimento conhecimento);
     Task<Conhecimento> FindById(Conhecimento conhecimento);
-    Task<Conhecimento> Delete(Conhecimento conhecimento);
-    Task<Categoria> CreateCategoria(Categoria conhecimento);
-
+    Task<Conhecimento> Delete(int id);
 }

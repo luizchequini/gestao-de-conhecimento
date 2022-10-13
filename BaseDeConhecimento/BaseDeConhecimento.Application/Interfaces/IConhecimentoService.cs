@@ -10,6 +10,5 @@ public interface IConhecimentoService
     Task<ConhecimentoDTO> Update(ConhecimentoDTO conhecimentoDTO);
     Task<ApiResult<List<ConhecimentoDTO>>> FindList(ConhecimentoDTO conhecimentoDTO);
     Task<ApiResult<ConhecimentoDTO>> FindById(ConhecimentoDTO conhecimentoDTO);
-    Task<ApiResult<ConhecimentoDTO>> Delete(ConhecimentoDTO conhecimentoDTO);
-    Task<ApiResult<CategoriaDTO>> CreateCategoria(CreateCategoriaRequestDTO sd);
+    Task<ApiResult<ConhecimentoDTO>> Delete(int id);
 }

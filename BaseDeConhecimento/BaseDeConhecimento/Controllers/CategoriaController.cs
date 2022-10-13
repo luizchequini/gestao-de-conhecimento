@@ -1,0 +1,46 @@
+using BaseDeConhecimento.Application.DTOS.Request;
+using BaseDeConhecimento.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BaseDeConhecimento.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class CategoriaController : ControllerBase
+{
+    private readonly ICategoriaService _CategoriaService;
+    public CategoriaController(ICategoriaService categoriaService)
+    {
+        _CategoriaService = categoriaService;
+    }
+
+    [HttpPost("create")]
+    public async Task<object> Create(CreateCategoriaRequestDTO request)
+    {
+
+        return await _CategoriaService.Create(request);
+
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<object> Delete(int id)
+    {
+
+        return await _CategoriaService.Delete(id);
+
+    }
+
+    [HttpPost("{id}")]
+    public async Task<object> FindById(int id)
+    {
+
+        return await _CategoriaService.FindById(id);
+
+    }
+
+    [HttpPost("update")]
+    public async Task<object> Update(CreateCategoriaRequestDTO request)
+    {
+        return await _CategoriaService.Update(request);
+    }
+}

@@ -11,7 +11,6 @@ namespace BaseDeConhecimento.Domain.InterfacesRepositorio
     {
         Task<T> Create(T obj);
         Task<T> Update(T obj);
-        Task<T> Delete(T obj);
         Task<T> Delete(int Id);
         Task<T> FindById(int Id);
         Task<List<T>> FindList(Expression expression);
