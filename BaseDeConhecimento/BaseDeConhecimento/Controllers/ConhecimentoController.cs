@@ -42,4 +42,9 @@ public class ConhecimentoController : ControllerBase
         return retorno;
     }
 
+    [HttpPut("update")]
+    public async Task<object> Update(CreateConhecimentoRequestDTO request)
+    {
+        return await _ConhecimentoService.Update(request);
+    }
 }
