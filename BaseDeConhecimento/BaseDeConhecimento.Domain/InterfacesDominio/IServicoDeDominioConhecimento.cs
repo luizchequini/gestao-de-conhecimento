@@ -14,4 +14,5 @@ public interface IServicoDeDominioConhecimento
     Task<List<Conhecimento>> FindList(Conhecimento conhecimento);
     Task<Conhecimento> FindById(Conhecimento conhecimento);
     Task<Conhecimento> Delete(int id);
+    Task<List<Conhecimento>> FindAll();
 }

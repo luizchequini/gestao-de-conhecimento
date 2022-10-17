@@ -1,7 +1,7 @@
 ﻿using BaseDeConhecimento.Domain.Entidades;
 using BaseDeConhecimento.Domain.InterfacesDominio;
 using BaseDeConhecimento.Domain.InterfacesRepositorio;
-using BaseDeConhecimento.Domain.Validation;
+using BaseDeConhecimento.Domain.Util;
 
 namespace BaseDeConhecimento.Domain.Servicos;
 
@@ -27,6 +27,11 @@ public class ServicoDeDominioConhecimento : IServicoDeDominioConhecimento
     public Task<Conhecimento> Delete(int id)
     {
         return _repositorioConhecimento.Delete(id);
+    }
+
+    public async Task<List<Conhecimento>> FindAll()
+    {
+        return await _repositorioConhecimento.ListaConhecimento();
     }
 
     public Task<Conhecimento> FindById(Conhecimento conhecimento)

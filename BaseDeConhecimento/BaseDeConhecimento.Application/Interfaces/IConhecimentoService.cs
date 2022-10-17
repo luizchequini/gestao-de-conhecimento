@@ -11,4 +11,5 @@ public interface IConhecimentoService
     Task<ApiResult<List<ConhecimentoDTO>>> FindList(ConhecimentoDTO conhecimentoDTO);
     Task<ApiResult<ConhecimentoDTO>> FindById(ConhecimentoDTO conhecimentoDTO);
     Task<ApiResult<ConhecimentoDTO>> Delete(int id);
+    Task<ApiResult<List<ConhecimentoDTO>>> FindAll();
 }

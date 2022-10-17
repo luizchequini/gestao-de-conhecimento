@@ -1,14 +1,18 @@
 ﻿using BaseDeConhecimento.Domain.InterfacesRepositorio;
+using BaseDeConhecimento.Domain.Util;
 using BaseDeConhecimento.Infraestrutura.Contexto;
+using BaseDeConhecimento.Infraestrutura.Util;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Transactions;
 
 namespace BaseDeConhecimento.Infraestrutura.Respositorios
 {
     public class RepositorioBase<T> : IRepositorioBase<T> where T : class
     {
         private readonly BaseDeConhecimentoContext _contexto;
-
+        internal DbSet<T> dbset;
         public RepositorioBase(BaseDeConhecimentoContext contexto)
         {
             _contexto = contexto;
@@ -53,5 +57,41 @@ namespace BaseDeConhecimento.Infraestrutura.Respositorios
             return obj;
         }
 
+        private IQueryable<T> Query(Expression<Func<T, object>>[] includes)
+        {
+            var query = includes.Aggregate<Expression<Func<T, object>>, IQueryable<T>>(dbset, (current, expression) => current.Include(expression));
+            return (query);
+        }
+
+        public async Task<List<T>> Recuperar(Expression<Func<T, bool>> predicate, Include<T> includes, bool somenteLeitura)
+        {
+            try
+            {
+                if (somenteLeitura)
+                {
+                    using (var scope = this.CriarScope())
+                    {
+                        return await Query(includes.ToArray()).AsNoTracking().Where(predicate).ToListAsync();
+                    }
+                }
+                else
+                {
+                    return await (this.Query(includes.ToArray()).Where(predicate).ToListAsync());
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Cria um TransactionScope para leitura de dados não comitados
+        /// </summary>
+        /// <returns></returns>
+        internal TransactionScope CriarScope()
+        {
+            return (new TransactionScope(TransactionScopeOption.Suppress, new TransactionOptions { IsolationLevel = IsolationLevel.ReadUncommitted }));
+        }
     }
 }
