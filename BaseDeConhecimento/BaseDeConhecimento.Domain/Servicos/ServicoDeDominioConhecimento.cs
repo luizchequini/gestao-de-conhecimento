@@ -44,8 +44,8 @@ public class ServicoDeDominioConhecimento : IServicoDeDominioConhecimento
         throw new NotImplementedException();
     }
 
-    public Task<Conhecimento> Update(Conhecimento conhecimento)
+    public async Task<Conhecimento> Update(Conhecimento conhecimento)
     {
-        throw new NotImplementedException();
+        return await _repositorioConhecimento.Update(conhecimento);
     }
 }

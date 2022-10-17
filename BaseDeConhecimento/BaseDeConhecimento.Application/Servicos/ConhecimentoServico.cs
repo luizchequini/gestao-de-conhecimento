@@ -121,8 +121,48 @@ public class ConhecimentoServico : IConhecimentoService
         throw new NotImplementedException();
     }
 
-    public Task<ConhecimentoDTO> Update(ConhecimentoDTO conhecimentoDTO)
+    public async Task<ApiResult<ConhecimentoDTO>> Update(CreateConhecimentoRequestDTO conhecimentoResquest)
     {
-        throw new NotImplementedException();
+
+        ApiResult<ConhecimentoDTO> apiResult = new ApiResult<ConhecimentoDTO>();
+
+        try
+        {
+            var conhecimento = _mapper.Map<Conhecimento>(conhecimentoResquest);
+
+            var validationResult = await new ConhecimentoValidator()
+                                                .ValidateAsync(conhecimento);
+
+            if (validationResult.IsValid)
+            {
+
+                var entity = await _servicoDeDominioConhecimento.Update(conhecimento);
+                var conhecimentoDTO = _mapper.Map<ConhecimentoDTO>(entity);
+                apiResult.Data = conhecimentoDTO;
+                apiResult.Success = true;
+                apiResult.Notification = new List<string> { "cadastrado com sucesso" };
+            }
+            else
+            {
+                apiResult.Data = null;
+                apiResult.Success = false;
+
+                var erros = new List<string>();
+                foreach (var item in validationResult.Errors)
+                {
+                    erros.Add($"Erro na propriedade {item.PropertyName} Erro {item.ErrorMessage}");
+                }
+
+                apiResult.Notification = erros;
+            }
+
+            return apiResult;
+        }
+        catch (Exception ex)
+        {
+            apiResult.Success = false;
+            apiResult.Notification = new List<string> { ex.Message };
+            return apiResult;
+        }
     }
 }
