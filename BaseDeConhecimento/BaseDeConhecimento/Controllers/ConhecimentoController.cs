@@ -1,7 +1,11 @@
+using BaseDeConhecimento.Application.DTOS;
 using BaseDeConhecimento.Application.DTOS.Request;
+using BaseDeConhecimento.Application.DTOS.Response;
 using BaseDeConhecimento.Application.Interfaces;
 using BaseDeConhecimento.Application.Servicos;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace BaseDeConhecimento.Controllers;
 
@@ -28,6 +32,14 @@ public class ConhecimentoController : ControllerBase
     public async Task<object> Delete(int id)
     {
         return await _ConhecimentoService.Delete(id);
+    }
+
+    [HttpGet("findall")]
+    public async Task<ApiResult<List<ConhecimentoDTO>>> FindAll()
+    {
+        var retorno = await _ConhecimentoService.FindAll();
+
+        return retorno;
     }
 
 }

@@ -9,5 +9,6 @@ namespace BaseDeConhecimento.Domain.InterfacesRepositorio
 {
     public interface IRepositorioConhecimento : IRepositorioBase<Conhecimento>
     {
+        Task<List<Conhecimento>> ListaConhecimento();
     }
 }

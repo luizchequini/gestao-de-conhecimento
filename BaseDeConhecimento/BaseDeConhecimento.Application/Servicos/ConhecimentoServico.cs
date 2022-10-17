@@ -88,6 +88,29 @@ public class ConhecimentoServico : IConhecimentoService
         }
     }
 
+    public async Task<ApiResult<List<ConhecimentoDTO>>> FindAll()
+    {
+        var apiResult = new ApiResult<List<ConhecimentoDTO>>();
+
+        try
+        {
+            var resultado = await _servicoDeDominioConhecimento.FindAll();
+            var conhecimentoDTO = new List<ConhecimentoDTO>();
+            apiResult.Data = _mapper.Map(resultado, conhecimentoDTO);
+            apiResult.Success = true;
+
+            apiResult.Notification = new List<string> { "Retornado com sucesso" };
+            return apiResult;
+        }
+        catch (Exception ex)
+        {
+
+            apiResult.Success = false;
+            apiResult.Notification = new List<string> { "falhou" + ex.Message };
+            return apiResult;
+        }
+    }
+
     public Task<ApiResult<ConhecimentoDTO>> FindById(ConhecimentoDTO conhecimentoDTO)
     {
         throw new NotImplementedException();

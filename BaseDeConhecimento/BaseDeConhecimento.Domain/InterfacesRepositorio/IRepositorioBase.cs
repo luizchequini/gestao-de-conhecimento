@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BaseDeConhecimento.Domain.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -14,5 +15,6 @@ namespace BaseDeConhecimento.Domain.InterfacesRepositorio
         Task<T> Delete(int Id);
         Task<T> FindById(int Id);
         Task<List<T>> FindAll(Expression<Func<T, bool>> predicate);
+        Task <List<T>> Recuperar(Expression<Func<T, bool>> predicate, Include<T> includes, bool somenteLeitura = false);
     }
 }
